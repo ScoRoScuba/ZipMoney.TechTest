@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZipPay.API.Interfaces\ZipPay.API.Interfaces.csproj" />
+    <ProjectReference Include="..\ZipPay.API.Repository\ZipPay.API.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

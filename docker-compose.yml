@@ -1,0 +1,45 @@
+version: '3.3'
+services:
+  db:
+    image: mariadb:10.2.14
+    ports:
+      - "3306:3306"
+    container_name: mysqldb
+    restart: unless-stopped      
+    environment:
+      MYSQL_ROOT_PASSWORD: zip  
+      MYSQL_DATABASE: ziptest
+      MYSQL_USER: zip
+      MYSQL_PASSWORD: ziptest
+    user: "1000:50"
+    command: mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./innodb-fix.cnf:/etc/mysql/conf.d/innodb-fix.cnf
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      zipco:
+        aliases:
+          - mysqldb      
+          
+  theapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    container_name: theApp
+    restart: unless-stopped      
+    ports:
+      - "5002:80"
+    environment: 
+      MYSQL_CONNECTION: server=mysqldb;port=3306;database=ziptest;uid=zip;password=ziptest
+    networks:
+      zipco:
+        aliases:
+          - theApp
+      
+networks:
+  zipco:
+
+ 
